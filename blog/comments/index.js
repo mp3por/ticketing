@@ -37,20 +37,16 @@ app.post('/posts/:id/comments', async (req, res) => {
         }
     };
 
-    // query service
+    // event bus
     await axios.post('http://localhost:4005/events', event);
-
-    // moderation service
-    await axios.post('http://localhost:4003/events', event);
 
     res.status(201).send(comments);
 });
 
 app.post('/events', async (req, res)=> {
-    console.log('Received Event: ', req.body.type);
+    console.log('Received Event: ', req.body);
 
-    const { type, data } = req.data;
-
+    const { type, data } = req.body;
     if (type === "CommentModerated") {
         const {postId, id, status, content } = data;
         const comments = commentsByPostId[postId];

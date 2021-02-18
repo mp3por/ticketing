@@ -8,7 +8,9 @@ app.use(cors());
 
 const posts = {};
 
+
 app.post('/events', (req, res) => {
+    console.log('Received Event: ', req.body);
     const {type, data} = req.body;
 
     if (type === 'PostCreated') {

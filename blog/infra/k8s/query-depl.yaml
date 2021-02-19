@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1
+  # defines which pods is this deployment managing
+  selector:
+    matchLabels:
+      app: query
+  # defines how the pods should look like
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: mp3por/query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP
+  # tells the service which pods to expose
+  selector:
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002 # external port
+      targetPort: 4002 # internal port

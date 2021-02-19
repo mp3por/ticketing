@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  # defines which pods is this deployment managing
+  selector:
+    matchLabels:
+      app: posts
+  # defines how the pods should look like
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: mp3por/posts:0.0.1

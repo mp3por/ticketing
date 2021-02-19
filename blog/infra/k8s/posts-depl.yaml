@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: posts
-          image: mp3por/posts:0.0.1
+          image: mp3por/posts

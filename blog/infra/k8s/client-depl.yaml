@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: posts-depl
+  name: client-depl
 spec:
   replicas: 1
   # defines which pods is this deployment managing
   selector:
     matchLabels:
-      app: posts
+      app: client
   # defines how the pods should look like
   template:
     metadata:
       labels:
-        app: posts
+        app: client
     spec:
       containers:
-        - name: posts
-          image: mp3por/posts
+        - name: client
+          image: mp3por/client
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: posts-clusterip-srv
+  name: client-srv
 spec:
   type: ClusterIP
   # tells the service which pods to expose
   selector:
-    app: posts
+    app: client
   ports:
-    - name: posts
+    - name: client
       protocol: TCP
-      port: 4000 # external port
-      targetPort: 4000 # internal port
+      port: 3000 # external port
+      targetPort: 3000 # internal port

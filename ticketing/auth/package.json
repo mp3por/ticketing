@@ -16,6 +16,7 @@
     "ts-node-dev": "^1.0.0-pre.65"
   },
   "dependencies": {
+    "express-async-errors": "^3.1.1",
     "express-validator": "^6.9.2"
   }
 }

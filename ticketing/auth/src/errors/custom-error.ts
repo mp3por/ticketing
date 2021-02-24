@@ -5,7 +5,7 @@ export abstract class CustomError extends Error {
         field?: string;
     }[]
 
-    constructor(message) {
+    constructor(message: string) {
         super(message);
 
         Object.setPrototypeOf(this, CustomError.prototype);

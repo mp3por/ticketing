@@ -1,8 +1,7 @@
 import express, {Request, Response} from "express";
-import {body, validationResult} from 'express-validator';
-import {validateRequest} from "./validate-request";
+import {body} from 'express-validator';
+import {validateRequest, BadRequestError } from '@mp3por-tickets/common';
 import {User} from "../models/user";
-import {BadRequestError} from "../errors/bad-request-error";
 import {Password} from "../services/password";
 import jwt from "jsonwebtoken";
 

@@ -6,9 +6,16 @@ const Index = ({currentUser}) => {
 }
 
 Index.getInitialProps = async () => {
-    const response = await axios.get('/api/users/currentuser');
-
-    return response.data;
+    // const response = await axios.get('/api/users/currentuser');
+    if (typeof window === 'undefined') {
+        
+    } else {
+        
+    }
+    
+    return {};
+       
+    // return response.data;
 }
 
 export default Index;

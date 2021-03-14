@@ -5,21 +5,21 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
-} from '@sgtickets/common';
+} from '@mp3por-tickets/common';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
 router.put(
   '/api/tickets/:id',
-  requireAuth,
   [
+    requireAuth,
     body('title').not().isEmpty().withMessage('Title is required'),
     body('price')
       .isFloat({ gt: 0 })
       .withMessage('Price must be provided and must be greater than 0'),
+    validateRequest,
   ],
-  validateRequest,
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
 

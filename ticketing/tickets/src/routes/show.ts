@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { NotFoundError } from '@mp3por-tickets/common';
+import { NotFoundError } from '@mp3por-tickets/common/build';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();

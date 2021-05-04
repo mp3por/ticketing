@@ -5,7 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
-} from '@mp3por-tickets/common';
+} from '@mp3por-tickets/common/build';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();

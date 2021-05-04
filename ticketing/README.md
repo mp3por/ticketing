@@ -48,9 +48,22 @@ Adding new pod https://www.udemy.com/course/microservices-with-node-js-and-react
 ### In the CommonModule
 repo - git@bitbucket.org:mp3por/microservices-udemy-common.git
 
+1. do changes
+2. do `npm run publish`
+3. In the app where the common module is used change the version of the common module in the `package.json`
+
 ## Testing
 1. go to specific pod
 2. run `npm test`
+
+## How it works
+NODE-JS - used for backend applications/services 
+React - used for frontend client
+NextJS - used for serverside rendering
+kubenertes - used for deployment management (something like docker on steroids)
+skaffold - used for managing k8s (something like docker-compose )
+NPM module - used for hosting shared code via npm package
+
 
 # KubeCTL cheatsheet - https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 * k get <ENTITY (pods/namespaces/secrets/)> - shows pods in DEFAULT namespace

@@ -17,8 +17,14 @@ stan.on('connect', ()=>{
     
     // 3. create subscription on specific channel
     const channelName = 'ticket:created';
-    const queueGroup = 'order-service-queue-group'
-    const sub = stan.subscribe(channelName, queueGroup);
+    const queueGroup = 'order-service-queue-group';
+    const options = stan.subscriptionOptions()
+        // Setting ManualAck = true we tell the NATS to wait for manual acknowledgement that the event was processed. 
+        // By default NATS marks every sent event as processed. 
+        // We don't want this if we want to be sure the event was processed even if something goes wrong
+        .setManualAckMode(true); 
+    
+    const sub = stan.subscribe(channelName, queueGroup, options);
     
     // 4. listen for events on the channel
     sub.on('message', (msg: Message) => {
@@ -27,6 +33,9 @@ stan.on('connect', ()=>{
         if (typeof data === 'string') {
             console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
         }
+        
+        // manual ack of the message
+        msg.ack();
     })
     
 });

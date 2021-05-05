@@ -63,6 +63,7 @@ NextJS - used for serverside rendering
 kubenertes - used for deployment management (something like docker on steroids)
 skaffold - used for managing k8s (something like docker-compose )
 NPM module - used for hosting shared code via npm package
+NATS Streaming Server - EventBus 
 
 
 # KubeCTL cheatsheet - https://kubernetes.io/docs/reference/kubectl/cheatsheet/

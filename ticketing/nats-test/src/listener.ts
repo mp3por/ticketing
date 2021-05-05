@@ -15,6 +15,11 @@ const stan = nats.connect('ticketing', clientId, {
 stan.on('connect', ()=>{
     console.log('Listener connected to NATS');
     
+    stan.on('close', () => {
+       console.log('NATS connection closed!');
+       process.exit();
+    });
+    
     // 3. create subscription on specific channel
     const channelName = 'ticket:created';
     const queueGroup = 'order-service-queue-group';
@@ -40,3 +45,6 @@ stan.on('connect', ()=>{
     
 });
 
+// listen for PROGRAM CLOSE events to safe exit
+process.on('SIGINT', () => stan.close());
+process.on('SIGTERM', () => stan.close());

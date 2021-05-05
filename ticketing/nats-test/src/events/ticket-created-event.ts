@@ -1,5 +1,5 @@
 import {Subjects} from "./subjects";
-import {Event} from './base-listener';
+import {Event} from './base-event';
 
 /**
  * Describes how a TicketCreatedEvent looks like

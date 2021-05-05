@@ -27,7 +27,17 @@ stan.on('connect', ()=>{
         // Setting ManualAck = true we tell the NATS to wait for manual acknowledgement that the event was processed. 
         // By default NATS marks every sent event as processed. 
         // We don't want this if we want to be sure the event was processed even if something goes wrong
-        .setManualAckMode(true); 
+        .setManualAckMode(true)
+        // ensure a new listeners gets all events which were emitted
+        // this is not really what we want because in 1 month this list will be enormous
+        .setDeliverAllAvailable()
+        // therefore we create a DurableSubscription 
+        // NATS will use this name to note which events were already processed by the service
+        // so that in case the service is down NATS knows exactly which events were missed 
+        // and not send all events but only the missed ones
+        // !!!! 
+        // NOTE: in order for this to work I need to also set the QueueGroup when subscribing
+        .setDurableName('order-service'); 
     
     const sub = stan.subscribe(channelName, queueGroup, options);
     

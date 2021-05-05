@@ -2,10 +2,12 @@
  * This is a listner of NATS events
  * 
  */
-import nats from 'node-nats-streaming';
+import nats, {Message} from 'node-nats-streaming';
+import {randomBytes} from "crypto";
 
 // 1. create client
-const stan = nats.connect('ticketing', '123', {
+const clientId = randomBytes(4).toString('hex');
+const stan = nats.connect('ticketing', clientId, {
     url: 'http://localhost:4222'
 });
 
@@ -15,11 +17,16 @@ stan.on('connect', ()=>{
     
     // 3. create subscription on specific channel
     const channelName = 'ticket:created';
-    const sub = stan.subscribe(channelName);
+    const queueGroup = 'order-service-queue-group'
+    const sub = stan.subscribe(channelName, queueGroup);
     
     // 4. listen for events on the channel
-    sub.on('message', (msg) => {
-        console.log('Message received');
+    sub.on('message', (msg: Message) => {
+        const data = msg.getData();
+        
+        if (typeof data === 'string') {
+            console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
+        }
     })
     
 });

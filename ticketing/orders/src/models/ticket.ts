@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import {Order, OrderStatus} from "./orders";
+import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 interface TicketAttrs {
     id: string;
@@ -9,8 +10,8 @@ interface TicketAttrs {
 
 export interface TicketDoc extends mongoose.Document {
     title: string;
-    price: number
-    isReserved() : Promise<boolean>
+    price: number;
+    isReserved() : Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -36,6 +37,7 @@ const ticketSchema = new mongoose.Schema({
         }
     }
 })
+
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
     return new Ticket({

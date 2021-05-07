@@ -43,6 +43,7 @@ router.post(
             ticket: ticket
         });
         await order.save();
+        // console.log('created order ', order)
         
         // publish an event
         

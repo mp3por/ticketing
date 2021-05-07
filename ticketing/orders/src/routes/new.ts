@@ -7,6 +7,8 @@ import {Order} from "../models/orders";
 
 const router = express.Router();
 
+const EXPIRATION_WINDOWS_SECONDS = 15 * 60;
+
 router.post(
     '/api/orders',
     [
@@ -30,14 +32,21 @@ router.post(
         }
         
         // Calculate expiration date for this order
-        
-        
+        const expiration = new Date();
+        expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOWS_SECONDS);
         
         // build and save the order
+        const order = Order.build({
+            userId: req.currentUser!.id,
+            status: OrderStatus.Created,
+            expiresAt: expiration,
+            ticket: ticket
+        });
+        await order.save();
         
         // publish an event
         
-        res.send({})
+        res.status(201).send(order);
     });
 
 export {router as newOrderRouter};

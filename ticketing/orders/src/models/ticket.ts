@@ -12,10 +12,12 @@ export interface TicketDoc extends mongoose.Document {
     title: string;
     price: number;
     isReserved() : Promise<boolean>;
+    version: number;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
     build(attrs: TicketAttrs): TicketDoc;
+    findByEvent(event: {id: string; version:number;}): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new mongoose.Schema({
@@ -38,6 +40,8 @@ const ticketSchema = new mongoose.Schema({
     }
 })
 
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
     return new Ticket({
@@ -46,6 +50,13 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
         price: attrs.price
     });
 };
+
+ticketSchema.statics.findByEvent = (event: {id: string; version:number}) => {
+    return Ticket.findOne({
+        version: event.version - 1,
+        _id: event.id
+    });
+}
 
 ticketSchema.methods.isReserved = async function() {
     // this = the ticket document on which we are calling the method

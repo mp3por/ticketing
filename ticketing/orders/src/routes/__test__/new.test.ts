@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import {Ticket} from "../../models/ticket";
 import {Order} from "../../models/orders";
 import {OrderStatus} from "@mp3por-tickets/common";
+import {natsWrapper} from "../../nats-wrapper";
 
 it('returns an error if the ticket does not exist', async () => {
     // create randomg new ObjectId
@@ -61,4 +62,21 @@ it('reserves a ticket', async () => {
         .expect(201);
 })
 
-it.todo('emits an order created event')
+it('emits an order created event', async ()=>{
+    const ticket = Ticket.build({
+        price: 20,
+        title: 'concert'
+    });
+    await ticket.save();
+
+    // ask the app to create an order for it
+    await request(app)
+        .post('/api/orders')
+        .set('Cookie', global.signin())
+        .send({
+            ticketId: ticket.id
+        })
+        .expect(201);
+    
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+})

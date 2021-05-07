@@ -4,6 +4,8 @@ import {body} from "express-validator";
 import {Ticket} from "../models/ticket";
 import {NotFoundError} from "@mp3por-tickets/common/build";
 import {Order} from "../models/orders";
+import {OrderCreatedPublisher} from "../events/publishers/order-created-publisher";
+import {natsWrapper} from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -46,6 +48,16 @@ router.post(
         // console.log('created order ', order)
         
         // publish an event
+        await new OrderCreatedPublisher(natsWrapper.client).publish({
+            id: order.id,
+            status: order.status,
+            ticket: {
+                id: order.ticket.id,
+                price: order.ticket.price
+            },
+            userId: order.userId,
+            expiresAt: order.expiresAt.toISOString()
+        });
         
         res.status(201).send(order);
     });

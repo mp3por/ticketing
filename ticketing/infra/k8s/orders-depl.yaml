@@ -17,7 +17,9 @@ spec:
           image: mp3por/orders
           env:
             - name: NATS_CLIENT_ID
-              value: 'asudhasd'
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: NATS_CLUSTER_ID
               value: 'ticketing'
             - name: NATS_URL

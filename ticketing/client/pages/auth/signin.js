@@ -1,50 +1,48 @@
-import { useState } from 'react';
-import useRequest from "../../hooks/use-request";
+import { useState, useEffect } from 'react';
 import Router from 'next/router';
+import useRequest from '../../hooks/use-request';
 
-const SignIn = () => {
-    const [email, setEmail] = useState('o2m222222g@om.com');
-    const [password, setPassword] = useState('312389');
-    const { doRequest, errors } = useRequest({
-        url:'/api/users/signin',
-        method: 'post',
-        body: {
-            email, password
-        },
-        onSuccess: () => Router.push('/')
-    });
+export default () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signin',
+    method: 'post',
+    body: {
+      email,
+      password
+    },
+    onSuccess: () => Router.push('/')
+  });
 
-    const onSubmit = async event => {
-        event.preventDefault();
-        await doRequest();
-    }
+  const onSubmit = async event => {
+    event.preventDefault();
 
-    return (
-        <form onSubmit={onSubmit}>
-            <h1>Sign In</h1>
-            <div className="form-group">
-                <label>Email Address</label>
-                <input
-                    className="form-control"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                />
-            </div>
+    await doRequest();
+  };
 
-            <div className="form-group">
-                <label>Password</label>
-                <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
-            </div>
-            {errors}
-            <button className="btn btn-primary">Sign In</button>
-
-        </form>
-    );
+  return (
+    <form onSubmit={onSubmit}>
+      <h1>Sign In</h1>
+      <div className="form-group">
+        <label>Email Address</label>
+        <input
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="form-control"
+        />
+      </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          type="password"
+          className="form-control"
+        />
+      </div>
+      {errors}
+      <button className="btn btn-primary">Sign In</button>
+    </form>
+  );
 };
-
-export default SignIn;

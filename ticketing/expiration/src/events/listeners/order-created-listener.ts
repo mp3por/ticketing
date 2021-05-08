@@ -5,10 +5,12 @@ import {expirationQueue} from "../../queues/expiration-queue";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+        const delay = new Date(data.expiresAt).getTime() - new Date().getTime();
+        
         await expirationQueue.add({
             orderId: data.id
         }, {
-            delay: 10000
+            delay: delay
         });
         
         msg.ack();
@@ -16,5 +18,4 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
     queueGroupName: string = queueGroupName;
     subject: Subjects.OrderCreated = Subjects.OrderCreated;
-    
 }

@@ -1,16 +1,18 @@
-import {MongoMemoryServer} from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import request from 'supertest';
-import {app} from '../app';
+import { app } from '../app';
 import jwt from 'jsonwebtoken';
 
 declare global {
     namespace NodeJS {
         interface Global {
-            signin(): string[];
+            signin(id?: string): string[];
         }
     }
 }
+
+jest.mock('../nats-wrapper');
 
 let mongo: any;
 beforeAll(async () => {
@@ -26,11 +28,8 @@ beforeAll(async () => {
     });
 });
 
-jest.mock('../nats-wrapper');
-
 beforeEach(async () => {
     jest.clearAllMocks();
-
     const collections = await mongoose.connection.db.collections();
 
     for (let collection of collections) {
@@ -43,10 +42,10 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-global.signin = () => {
+global.signin = (id?: string) => {
     // Build a JWT payload.  { id, email }
     const payload = {
-        id: new mongoose.Types.ObjectId().toHexString(),
+        id: id || new mongoose.Types.ObjectId().toHexString(),
         email: 'test@test.com',
     };
 
@@ -54,7 +53,7 @@ global.signin = () => {
     const token = jwt.sign(payload, process.env.JWT_KEY!);
 
     // Build session Object. { jwt: MY_JWT }
-    const session = {jwt: token};
+    const session = { jwt: token };
 
     // Turn that session into JSON
     const sessionJSON = JSON.stringify(session);

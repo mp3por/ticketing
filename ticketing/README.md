@@ -1,11 +1,19 @@
 # Set Up
 
-## Create JWT_KEY
+## Create JWT_KEY secret
 Must create the JWT_KEY secret with the following command
 
 https://www.udemy.com/course/microservices-with-node-js-and-react/learn/lecture/19119820#notes
 
 `kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asddas`
+
+## Create STRIPE_KEY secret
+Must create the STRIPE_KEY secret to allow STRIPE integration
+
+https://dashboard.stripe.com/test/apikeys
+
+`kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=asddas`
+
 
 ## Setup Ingress 
 Get the installation instructions in the following link
